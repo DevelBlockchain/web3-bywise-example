@@ -20,7 +20,7 @@ export default function Home() {
     if (userInfo) {
       setConnect(true);
 
-      updateValue(); // call update update value
+      updateValue(); // call update value
     }
   }
 
@@ -46,7 +46,7 @@ export default function Home() {
         },
       ]
     });
-    updateValue(); // call update update value
+    updateValue(); // call update value
   }
 
   return (
@@ -69,9 +69,6 @@ export default function Home() {
               {'Contract Value: '}
               <code className={styles.code}>"{value}"</code>
             </span>
-            <button className={styles.card} onClick={updateValue}>
-              <h2>Update Value 🔥</h2>
-            </button>
           </p>
         </>}
 
