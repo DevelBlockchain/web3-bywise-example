@@ -2,51 +2,51 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { useState } from 'react';
 import BywiseProvider from '@bywise/provider';
-import { BywiseHelper, TxType } from '@bywise/web3';
+import { TxType } from '@bywise/web3';
 import { useRouter } from 'next/router';
+
+const chain = 'mainnet'
+const provider = new BywiseProvider(chain);
+const contractAddress = 'BWS1MC637abce1D5263e36FbBa6bCe77a01e764B4A65e1e68'; // your contract address
 
 export default function Home() {
   const router = useRouter();
   const [connected, setConnect] = useState(false);
-  const [address, setAddress] = useState('');
-  const [balance, setBalance] = useState('0');
-  const [name, setName] = useState(null);
-
-  const chain = 'mainnet'
-  const provider = new BywiseProvider(chain);
+  const [value, setValue] = useState('');
 
   const connect = async () => {
     const userInfo = await provider.connect();
 
     if (userInfo) {
-      console.log('userInfo', userInfo)
-      setAddress(provider.address)
-
-      const infoBlockchainUser = await provider.web3.wallets.getWalletInfo(provider.address, chain);
-      console.log('infoBlockchainUser', infoBlockchainUser)
-      if (infoBlockchainUser) {
-        setBalance(infoBlockchainUser.balance)
-        setName(infoBlockchainUser.name)
-      }
       setConnect(true);
+
+      updateValue(); // call update update value
     }
   }
 
-  const trySendTransaction = async () => {
-    const result = await provider.send({
-      to: [BywiseHelper.ZERO_ADDRESS],
-      amount: ['0'],
-      type: TxType.TX_JSON,
-      data: {
-        myData: `huehuehue`
-      }
-    });
-    if (result) {
-      console.log('result', result)
-      alert(`success - txId: ${result.tx.hash}`);
+  const updateValue = async () => {
+    const fullOutput = await provider.web3.contracts.readContract(chain, contractAddress, 'getValue', []);
+    if (fullOutput.error) {
+      alert(`error ${fullOutput.error}`);
     } else {
-      alert(`canceled transaction`);
+      const contractReturnValue = fullOutput.output;
+      setValue(contractReturnValue);
     }
+  }
+
+  const setValueButton = async () => {
+    const result = await provider.send({
+      to: [contractAddress],
+      amount: ['0'],
+      type: TxType.TX_CONTRACT_EXE,
+      data: [
+        {
+          method: 'setValue',
+          inputs: [`I believe I can fly - ${Math.floor(Math.random() * 1000)}`],
+        },
+      ]
+    });
+    updateValue(); // call update update value
   }
 
   return (
@@ -63,41 +63,22 @@ export default function Home() {
           Welcome to <a target="_blank" href="https://bywise.org" rel="noopener noreferrer">Bywise</a>
         </h1>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
         {connected && <>
           <p className={styles.description}>
             <span>
-              {'Connected User'}
+              {'Contract Value: '}
+              <code className={styles.code}>"{value}"</code>
             </span>
-            <br />
-            <span>
-              {'Address: '}
-              <code className={styles.code}>{address}</code>
-            </span>
-            <br />
-            <span>
-              {'Balance: '}
-              <code className={styles.code}>
-                {balance}
-                {' BWS'}
-              </code>
-            </span>
-            <br />
-            {name && <span>
-              {'Name: '}
-              <code className={styles.code}>{name}</code>
-            </span>}
+            <button className={styles.card} onClick={updateValue}>
+              <h2>Update Value 🔥</h2>
+            </button>
           </p>
         </>}
 
         <div className={styles.grid} >
           {connected && <>
-            <button className={styles.card} onClick={trySendTransaction}>
-              <h2>Send Transaction 🔥</h2>
+            <button className={styles.card} onClick={setValueButton}>
+              <h2>Update Value 🔥</h2>
             </button>
           </>}
 
