@@ -3,8 +3,10 @@ import styles from '../styles/Home.module.css'
 import { useState } from 'react';
 import BywiseProvider from '@bywise/provider';
 import { BywiseHelper, TxType } from '@bywise/web3';
+import { useRouter } from 'next/router';
 
 export default function Home() {
+  const router = useRouter();
   const [connected, setConnect] = useState(false);
   const [address, setAddress] = useState('');
   const [balance, setBalance] = useState('0');
@@ -52,11 +54,11 @@ export default function Home() {
       <Head>
         <title>Web3 Example</title>
         <meta name="description" content="Bywise web3 provider example" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href={`${router.basePath}/favicon.ico`} />
       </Head>
 
       <main className={styles.main}>
-        <img className={styles.bywise_logo} src='/favicon.ico' alt='Blockchain Bywise Logo' />
+        <img className={styles.bywise_logo} src={`${router.basePath}/favicon.ico`} alt='Blockchain Bywise Logo' />
         <h1 className={styles.title}>
           Welcome to <a target="_blank" href="https://bywise.org" rel="noopener noreferrer">Bywise</a>
         </h1>
@@ -113,7 +115,7 @@ export default function Home() {
         >
           Powered by{' '}
           <span className={styles.logo}>
-            <img src='/devel.svg' alt='Devel Blockchain Logo' height={40} />
+            <img src={`${router.basePath}/devel.svg`} alt='Devel Blockchain Logo' height={40} />
           </span>
         </a>
       </footer>
