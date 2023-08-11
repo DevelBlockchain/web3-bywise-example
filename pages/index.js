@@ -5,6 +5,9 @@ import BywiseProvider from '@bywise/provider';
 import { BywiseHelper, TxType } from '@bywise/web3';
 import { useRouter } from 'next/router';
 
+const chain = 'mainnet'
+const provider = new BywiseProvider(chain);
+
 export default function Home() {
   const router = useRouter();
   const [connected, setConnect] = useState(false);
@@ -12,8 +15,6 @@ export default function Home() {
   const [balance, setBalance] = useState('0');
   const [name, setName] = useState(null);
 
-  const chain = 'mainnet'
-  const provider = new BywiseProvider(chain);
 
   const connect = async () => {
     const userInfo = await provider.connect();
