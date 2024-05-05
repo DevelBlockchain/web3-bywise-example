@@ -6,19 +6,16 @@
     "build": "BUILD_EXPORT=true next build && touch out/.nojekyll",
     "predeploy": "npm run build",
     "deploy": "gh-pages -t -d out",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start"
   },
   "dependencies": {
-    "@bywise/provider": "^1.0.8",
-    "@bywise/web3": "^0.10.0",
-    "next": "13.4.13",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "@bywise/provider": "^1.1.1",
+    "@bywise/web3": "^1.0.3",
+    "next": "14.2.3",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "eslint": "8.46.0",
-    "eslint-config-next": "13.4.13",
     "gh-pages": "^6.0.0"
   }
 }
